@@ -1,0 +1,125 @@
+[build-system]
+requires = [
+    "setuptools==80.9.0",
+    "setuptools_scm==9.2.2",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "system-pyside6"
+description = "A Python package that exposes system-installed PySide6 packages into a virtual environment."
+readme = "README.md"
+requires-python = ">= 3.10"
+license = "BSD-3-Clause"
+license-files = [
+    "LICENSE",
+]
+authors = [
+    {name="Russell Keith-Magee", email="russell@keith-magee.com"},
+]
+maintainers = [
+    {name="BeeWare Team", email="team@beeware.org"},
+]
+keywords = [
+    "PySide6",
+    "Qt",
+    "venv",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: X11 Applications :: KDE",
+    "Environment :: X11 Applications :: Qt",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development",
+    "Topic :: Utilities",
+]
+dependencies = [
+]
+
+[dependency-groups]
+# Extras used by developers *of* briefcase are pinned to specific versions to
+# ensure environment consistency.
+pre-commit = [
+    "pre-commit == 4.4.0",
+]
+
+setuptools-scm = [
+    "setuptools_scm == 9.2.2",
+]
+
+towncrier = [
+    "towncrier==25.8.0",
+]
+
+tox-uv = [
+    "tox-uv == 1.29.0",
+]
+
+dev = [
+    {include-group = "pre-commit"},
+    {include-group = "setuptools-scm"},
+    {include-group = "tox-uv"},
+]
+
+test = [
+    "pytest == 9.0.1",
+]
+
+[project.urls]
+Homepage = "https://beeware.org/system-pytest6"
+Funding = "https://beeware.org/contributing/membership/"
+Documentation = "https://system-pytest6.readthedocs.io/en/latest/"
+Tracker = "https://github.com/beeware/system-pytest6/issues"
+Source = "https://github.com/beeware/system-pytest6"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "error",
+]
+
+[tool.ruff.lint]
+# In addition to the default rules, these additional rules will be used:
+extend-select = [
+    "E",      # pycodestyle
+    "W",      # pycodestyle
+    "F",      # pyflakes
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "YTT",    # flake8-2020
+    "ASYNC",  # flake8-async
+    "C4",     # flake8-comprehensions
+    "I",      # isort
+    "RUF",    # ruff-specific rules
+    "PT",     # flake8-pytest-style
+    "FURB",   # refurb
+    "ISC",    # flake8-implicit-str-concat
+    "PGH",    # pygrep-hooks
+    "T20",    # flake8-print
+    "PIE",    # flake8-pie
+    "SIM",    # flake8-simplify
+]
+
+ignore = [
+    "SIM105",  # use `contextlib.suppress` (too opinionated)
+    "SIM108",  # replace if-else with ternary operator (too opinionated)
+]
+
+[tool.setuptools_scm]
+# To enable SCM versioning, we need an empty tool configuration for setuptools_scm
+
+[tool.codespell]
+skip = '.git,*.pdf,*.svg'
+# the way to make case-sensitive skips of words etc
+ignore-regex = '\bNd\b'
+# case-insensitive
+# ignore-words-list = ''
