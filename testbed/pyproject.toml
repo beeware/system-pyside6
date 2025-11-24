@@ -5,8 +5,8 @@ bundle = "com.beeware.system-pyside6.testbed"
 version = "0.0.1"
 url = "https://beeware.org"
 license.file = "LICENSE"
-author = "John"
-author_email = "johnzhou721@gmail.com"
+author = "Russell Keith-Magee"
+author_email = "russell@keith-magee.com"
 
 [tool.briefcase.app.testbed]
 formal_name = "System PySide6 Testbed"
