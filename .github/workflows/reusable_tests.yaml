@@ -1,0 +1,66 @@
+name: Common Workflow
+
+on:
+  workflow_call:
+    inputs:
+      distro:
+        required: true
+        type: string
+      install_cmd:
+        required: true
+        type: string
+
+jobs:
+  venv-test:
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ inputs.distro }}
+    env:
+      QT_STYLE_OVERRIDE: breeze
+
+    steps:
+      - name: Dependencies
+        run: |
+          ${{ inputs.install_cmd }}
+
+      - name: actions/checkout issue 363 workaround
+        run: |
+          git config --global --add safe.directory $PWD
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run tests
+        run: |
+          tox -e py
+
+  briefcase-testbed:
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ inputs.distro }}
+    env:
+      QT_STYLE_OVERRIDE: breeze
+
+    steps:
+      - name: Dependencies
+        run: |
+          ${{ inputs.install_cmd }}
+
+      - name: actions/checkout issue 363 workaround
+        run: |
+          git config --global --add safe.directory $PWD
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Install Development Briefcase in venv
+        run: |
+          python3 -m venv venv
+          . venv/bin/activate
+          python3 -m pip install git+https://github.com/beeware/briefcase.git
+
+      - name: Run testbed
+        run: |
+          . venv/bin/activate
+          cd testbed
+          briefcase run --test
