@@ -46,7 +46,7 @@ dependencies = [
 ]
 
 [dependency-groups]
-# Extras used by developers *of* briefcase are pinned to specific versions to
+# Extras used by developers *of* system-pyside6 are pinned to specific versions to
 # ensure environment consistency.
 pre-commit = [
     "pre-commit == 4.4.0",
@@ -56,18 +56,14 @@ setuptools-scm = [
     "setuptools_scm == 9.2.2",
 ]
 
-towncrier = [
-    "towncrier==25.8.0",
-]
-
-tox-uv = [
-    "tox-uv == 1.29.0",
+tox = [
+    "tox == 4.32.0",
 ]
 
 dev = [
     {include-group = "pre-commit"},
     {include-group = "setuptools-scm"},
-    {include-group = "tox-uv"},
+    {include-group = "tox"},
 ]
 
 test = [
@@ -75,11 +71,11 @@ test = [
 ]
 
 [project.urls]
-Homepage = "https://beeware.org/system-pytest6"
+Homepage = "https://beeware.org/system-pyside6"
 Funding = "https://beeware.org/contributing/membership/"
-Documentation = "https://system-pytest6.readthedocs.io/en/latest/"
-Tracker = "https://github.com/beeware/system-pytest6/issues"
-Source = "https://github.com/beeware/system-pytest6"
+Documentation = "https://system-pyside6.readthedocs.io/en/latest/"
+Tracker = "https://github.com/beeware/system-pyside6/issues"
+Source = "https://github.com/beeware/system-pyside6"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -116,6 +112,7 @@ ignore = [
 
 [tool.setuptools_scm]
 # To enable SCM versioning, we need an empty tool configuration for setuptools_scm
+
 
 [tool.codespell]
 skip = '.git,*.pdf,*.svg'
