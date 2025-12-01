@@ -1,0 +1,65 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+    with:
+      attest-package: "true"
+
+  release:
+    name: Create Release
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      # This permission is required for trusted publishing.
+      id-token: write
+    steps:
+      - name: Set build variables
+        run: |
+          echo "VERSION=${GITHUB_REF_NAME#v}" | tee -a $GITHUB_ENV
+
+      - name: Set up Python
+        uses: actions/setup-python@v6.0.0
+        with:
+          python-version: "3.X"
+
+      - name: Get packages
+        uses: actions/download-artifact@v6.0.0
+        with:
+          pattern: Packages
+          path: dist
+
+      - name: Create release
+        uses: ncipollo/release-action@v1.20.0
+        with:
+          name: ${{ env.VERSION }}
+          draft: true
+          artifacts: dist/*
+          artifactErrorsFailBuild: true
+
+  test-publish:
+    name: Publish test package
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      # This permission is required for trusted publishing.
+      id-token: write
+    steps:
+      - name: Get packages
+        uses: actions/download-artifact@v6.0.0
+        with:
+          name: ${{ needs.ci.outputs.artifact-name }}
+          path: dist
+
+      - name: Publish release to Test PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
