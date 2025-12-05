@@ -132,16 +132,23 @@ class IsolatedPackageFinder(DistributionFinder):
     def find_spec(self, fullname, path=None, target=None):
         """
         :param fullname: Fully-qualified name of the module to find.
+            e.g. PySide6, PySide6.QtCore
         :param path: __path__ of the parent package for submodules;
             None for top-level imports.
+            e.g. None, /usr/lib/python3/dist-packages/PySide6
         :param target: Some sort of existing module object to aid the
             finder; unused here.
         """
         for pkg, pkg_paths in self.package_dirs.items():
             if fullname == pkg or fullname.startswith(pkg + "."):
-                for path in pkg_paths:
+                for pkg_path in pkg_paths:
+                    # Use pkg_path here, as PathFinder.find_spec
+                    # accepts the value of an array of paths such as
+                    # sys.path for its second argument -- i.e. it's the
+                    # root packages directory, not the path of
+                    # the parent for submodules like our path parameter.
                     spec = importlib.machinery.PathFinder.find_spec(
-                        fullname, [str(path.parent)]
+                        fullname, [str(pkg_path.parent)]
                     )
                     if spec is not None:
                         return spec
