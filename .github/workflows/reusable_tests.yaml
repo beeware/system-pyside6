@@ -29,7 +29,7 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v6
-      
+
       - name: Make Python Venv and Install Deps
         run: |
           python -m venv venv
@@ -59,7 +59,7 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v6
-        
+
       - name: Make Python Venv and Install Deps
         run: |
           python -m venv venv
