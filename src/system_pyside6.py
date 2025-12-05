@@ -102,9 +102,12 @@ def locate_dist_info_dir(pkgname):
 
 
 class IsolatedDistribution(Distribution):
-    def __init__(self, pkgname):
+    # pkgname is the package name to look for; _dist_info
+    # is the pre-located metadata for the package.  The metapath
+    # finder manages its caching, so it is passed as a parameter.
+    def __init__(self, pkgname, dist_info):
         self.pkgname = pkgname
-        self._dist_info = locate_dist_info_dir(pkgname)
+        self._dist_info = dist_info
 
         if not self._dist_info:
             raise ImportError(f"No dist-info found for {pkgname}")
@@ -122,8 +125,18 @@ class IsolatedDistribution(Distribution):
 class IsolatedPackageFinder(DistributionFinder):
     def __init__(self, package_dirs):
         self.package_dirs = package_dirs
+        self.dist_info_dirs = {
+            pkgname: locate_dist_info_dir(pkgname) for pkgname in package_dirs
+        }
 
     def find_spec(self, fullname, path=None, target=None):
+        """
+        :param fullname: Fully-qualified name of the module to find.
+        :param path: __path__ of the parent package for submodules;
+            None for top-level imports.
+        :param target: Some sort of existing module object to aid the
+            finder; unused here.
+        """
         for pkg, pkg_paths in self.package_dirs.items():
             if fullname == pkg or fullname.startswith(pkg + "."):
                 for path in pkg_paths:
@@ -144,7 +157,7 @@ class IsolatedPackageFinder(DistributionFinder):
         # System packages on Fedora etc. uses PySide6 as the distribution.
         # instead of like PySide6-Essentials used on PyPI.
         if context.name in self.package_dirs:
-            yield IsolatedDistribution(context.name)
+            yield IsolatedDistribution(context.name, self.dist_info_dirs[context.name])
 
 
 sys.meta_path.insert(
