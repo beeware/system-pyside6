@@ -45,6 +45,7 @@ classifiers = [
 dependencies = [
 ]
 
+
 [dependency-groups]
 # Extras used by developers *of* system-pyside6 are pinned to specific versions to
 # ensure environment consistency.
@@ -56,14 +57,14 @@ setuptools-scm = [
     "setuptools_scm == 9.2.2",
 ]
 
-tox = [
-    "tox == 4.32.0",
+tox-uv = [
+    "tox-uv == 1.29.0",
 ]
 
 dev = [
     {include-group = "pre-commit"},
     {include-group = "setuptools-scm"},
-    {include-group = "tox"},
+    {include-group = "tox-uv"},
 ]
 
 test = [
