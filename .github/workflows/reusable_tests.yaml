@@ -32,7 +32,7 @@ jobs:
 
       - name: Make Python Venv and Install Deps
         run: |
-          python -m venv venv
+          python3 -m venv venv
           . venv/bin/activate
           python3 -m pip install . --group dev
 
@@ -62,7 +62,7 @@ jobs:
 
       - name: Make Python Venv and Install Deps
         run: |
-          python -m venv venv
+          python3 -m venv venv
           . venv/bin/activate
           python3 -m pip install . --group dev
           python3 -m pip install git+https://github.com/beeware/briefcase.git
