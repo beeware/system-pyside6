@@ -1,19 +1,10 @@
 import ast
 import importlib.machinery
+import platform
 import subprocess
 import sys
 from importlib.metadata import Distribution, DistributionFinder
 from pathlib import Path
-
-
-def get_distro():
-    try:
-        with open("/etc/os-release") as f:
-            for line in f:
-                if line.startswith("ID="):
-                    return line.strip().split("=")[1].strip('"').lower()
-    except FileNotFoundError:
-        return None
 
 
 def get_system_site():
@@ -33,7 +24,7 @@ def get_system_site():
     )
 
 
-DISTRO = get_distro()
+DISTRO = platform.freedesktop_os_release()["ID"]
 VERS = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 # Below, locations are hardcoded for common distros' layout, and those
