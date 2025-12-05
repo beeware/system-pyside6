@@ -8,6 +8,15 @@ from pathlib import Path
 
 
 def get_system_site():
+    """
+    Locate the system site directories by running python3 globally
+    (thus circumventing venv) and printing its site packages directories.
+
+    This is used as a fallback for uncommon distros for which we do not
+    know where the system site package directories are.
+
+    :return: List of global site-package directories.
+    """
     return ast.literal_eval(
         subprocess.run(
             [
@@ -45,6 +54,13 @@ else:
 
 
 def locate_package(package_name):
+    """
+    Locate a package in system directories by a specific name.
+
+    :param package_name: Name of the package to search for.
+    :return: All package directories matching the package name.
+    """
+
     paths = []
     for directory in PACKAGE_DIR:
         path = Path(directory) / package_name
@@ -53,7 +69,16 @@ def locate_package(package_name):
     return paths
 
 
-def find_dist_info_dir(pkgname):
+def locate_dist_info_dir(pkgname):
+    """
+    Locate the distribution metadata directory for a package.
+    Accepted metadata directories either uses [NAME].{dist-info, egg-info},
+    or [NAME]-[VERSION].{dist-info, egg-info}; this matches the way
+    various common distros distribute the metadata directories.
+
+    :param pkgname: Package name to search metadata directory for.
+    :return: The matching metadata directory or None if missing.
+    """
     for directory in DIST_INFO_DIR:
         if not Path(directory).exists():
             continue
@@ -79,7 +104,7 @@ def find_dist_info_dir(pkgname):
 class IsolatedDistribution(Distribution):
     def __init__(self, pkgname):
         self.pkgname = pkgname
-        self._dist_info = find_dist_info_dir(pkgname)
+        self._dist_info = locate_dist_info_dir(pkgname)
 
         if not self._dist_info:
             raise ImportError(f"No dist-info found for {pkgname}")
