@@ -6,10 +6,26 @@ on:
     branches:
       main
   workflow_call:
+    inputs:
+      attest-package:
+        description: "Create GitHub provenance attestation for the package."
+        default: "false"
+        type: string
+    outputs:
+      artifact-name:
+        description: "Name of the uploaded artifact; use for artifact retrieval."
+        value: ${{ jobs.package.outputs.artifact-name }}
 
 concurrency:
   group: ${{ github.workflow}}-${{ github.ref }}
   cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  FORCE_COLOR: "1"
 
 jobs:
   pre-commit:
@@ -24,10 +40,12 @@ jobs:
     runs-on: "ubuntu-latest"
     permissions:
       id-token: write
+      contents: read
       attestations: write
+
     steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v6.0.0
       with:
         fetch-depth: 0
 
