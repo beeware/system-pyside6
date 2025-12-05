@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 from setuptools import setup
@@ -9,7 +8,7 @@ class add_pyside6(build_py):
     def run(self):
         super().run()
         self.copy_file(
-            os.path.abspath(os.path.dirname(__file__)) + "/system_pyside6.pth",
+            str(Path(__file__).resolve().parent / "system_pyside6.pth"),
             str(Path(self.build_lib) / "system_pyside6.pth"),
             preserve_mode=0,
         )
