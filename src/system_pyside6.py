@@ -1,6 +1,5 @@
 import ast
 import importlib.machinery
-import platform
 import subprocess
 import sys
 from importlib.metadata import Distribution, DistributionFinder
@@ -11,9 +10,6 @@ def get_system_site():
     """
     Locate the system site directories by running python3 globally
     (thus circumventing venv) and printing its site packages directories.
-
-    This is used as a fallback for uncommon distros for which we do not
-    know where the system site package directories are.
 
     :return: List of global site-package directories.
     """
@@ -33,24 +29,7 @@ def get_system_site():
     )
 
 
-DISTRO = platform.freedesktop_os_release()["ID"]
-VERS = f"{sys.version_info.major}.{sys.version_info.minor}"
-
-# Below, locations are hardcoded for common distros' layout, and those
-# directories for package and distribution info are searched instead of
-# the entire system site packages as defined above.
-
-if DISTRO == "fedora":
-    PACKAGE_DIR = [f"/usr/lib/python{VERS}/site-packages/"]
-    DIST_INFO_DIR = [f"/usr/lib64/python{VERS}/site-packages/"]
-elif DISTRO == "ubuntu":
-    PACKAGE_DIR = ["/usr/lib/python3/dist-packages/"]
-    DIST_INFO_DIR = ["/usr/lib/python3/dist-packages/"]
-elif DISTRO.startswith("opensuse"):
-    PACKAGE_DIR = [f"/usr/lib64/python{VERS}/site-packages/"]
-    DIST_INFO_DIR = [f"/usr/lib64/python{VERS}/site-packages/"]
-else:
-    PACKAGE_DIR = DIST_INFO_DIR = get_system_site()
+SITE_PACKAGE_DIR = get_system_site()
 
 
 def locate_package(package_name):
@@ -62,7 +41,7 @@ def locate_package(package_name):
     """
 
     paths = []
-    for directory in PACKAGE_DIR:
+    for directory in SITE_PACKAGE_DIR:
         path = Path(directory) / package_name
         if path.exists() and path.is_dir():
             paths.append(path)
@@ -79,7 +58,7 @@ def locate_dist_info_dir(pkgname):
     :param pkgname: Package name to search metadata directory for.
     :return: The matching metadata directory or None if missing.
     """
-    for directory in DIST_INFO_DIR:
+    for directory in SITE_PACKAGE_DIR:
         if not Path(directory).exists():
             continue
         for entry in Path(directory).iterdir():
