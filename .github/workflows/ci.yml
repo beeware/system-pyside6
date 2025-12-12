@@ -89,12 +89,6 @@ jobs:
                 make \
                 pkgconf-pkg-config
 
-              # Technically an update after install
-              # is needed to not brick the system;
-              # however, this is a container, so do
-              # whatever we want to save time.
-              # dnf upgrade -y
-
           - distro: archlinux:base
             install_cmd: |
               pacman -Sy --noconfirm \
@@ -154,4 +148,3 @@ jobs:
         run: |
           . venv/bin/activate
           tox -e py
-
