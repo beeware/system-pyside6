@@ -52,7 +52,7 @@ jobs:
     - name: Build and inspect package
       uses: hynek/build-and-inspect-python-package@v2.14.0
       with:
-        attest-build-provenance-github: 'true'
+        attest-build-provenance-github: ${{ inputs.attest-package }}
 
   test:
     name: Test (${{ matrix.distro }})
