@@ -50,7 +50,7 @@ dependencies = [
 # Extras used by developers *of* system-pyside6 are pinned to specific versions to
 # ensure environment consistency.
 pre-commit = [
-    "pre-commit == 4.4.0",
+    "pre-commit == 4.5.0",
 ]
 
 setuptools-scm = [
@@ -68,7 +68,7 @@ dev = [
 ]
 
 test = [
-    "pytest == 9.0.1",
+    "pytest == 9.0.2",
 ]
 
 [project.urls]
