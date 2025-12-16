@@ -21,7 +21,7 @@ To use `system-pyside6`, install the system packages for PySide6:
 
 * **Ubuntu / Debian** - `sudo apt-get install python3-pyside6.qtwidgets` (and other modules you may need, such as ``python3-pyside6.qtcore``; Only available from Ubuntu 24.10+ / Debian 13+)
 
-* **Fedora** - `sudo dnf install python3-pyside6` and `sudo dnf upgrade --refresh` - **NOTE** that the second step is needed because installing PySide6 upgrades hundreds of packages, **some of them which have incorrect dependencies which MAY BRICK YOUR SYSTEM!**
+* **Fedora** - `sudo dnf install python3-pyside6`, then `sudo dnf upgrade --refresh`
 
 * **Arch/ Manjaro** - `sudo pacman -Syu pyside6`
 

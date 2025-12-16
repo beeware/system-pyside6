@@ -45,7 +45,6 @@ classifiers = [
 dependencies = [
 ]
 
-
 [dependency-groups]
 # Extras used by developers *of* system-pyside6 are pinned to specific versions to
 # ensure environment consistency.
@@ -109,7 +108,6 @@ ignore = [
 
 [tool.setuptools_scm]
 # To enable SCM versioning, we need an empty tool configuration for setuptools_scm
-
 
 [tool.codespell]
 skip = '.git,*.pdf,*.svg'

@@ -1,5 +1,4 @@
 name: CI
-
 on:
   pull_request:
   push:
@@ -57,7 +56,11 @@ jobs:
   test:
     name: Test (${{ matrix.distro }})
     needs: package
-
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ matrix.distro }}
+    env:
+      QT_STYLE_OVERRIDE: breeze
     strategy:
       fail-fast: false
       matrix:
@@ -119,32 +122,23 @@ jobs:
                 patterns-devel-base-devel_basis \
                 python3-devel
 
-    runs-on: ubuntu-latest
-    container:
-      image: ${{ matrix.distro }}
-    env:
-      QT_STYLE_OVERRIDE: breeze
-
     steps:
-      - name: Dependencies
+      - name: Install system dependencies
         run: |
           ${{ matrix.install_cmd }}
 
-      - name: actions/checkout issue 363 workaround
+      - name: Workaround actions/checkout issue 363
         run: |
           git config --global --add safe.directory $PWD
 
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Make Python Venv and Install Deps
+      - name: Install Python dependencies
         run: |
-          python3 -m venv venv
-          . venv/bin/activate
           python3 -m pip install -U pip
-          python3 -m pip install . --group dev
+          python3 -m pip install --group dev
 
       - name: Run tests
         run: |
-          . venv/bin/activate
           tox -e py
