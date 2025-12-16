@@ -7,9 +7,10 @@ from pathlib import Path
 
 
 def get_system_site():
-    """
-    Locate the system site directories by running python3 globally
-    (thus circumventing venv) and printing its site packages directories.
+    """Locate the system site package directories.
+
+    This (deliberately) circumvents any virtual environment to print the site
+    package directories for the system Python.
 
     :return: List of global site-package directories.
     """
@@ -33,8 +34,7 @@ SITE_PACKAGE_DIR = get_system_site()
 
 
 def locate_package(package_name):
-    """
-    Locate a package in system directories by a specific name.
+    """Locate a package in system directories by a specific name.
 
     :param package_name: Name of the package to search for.
     :return: All package directories matching the package name.
@@ -49,8 +49,8 @@ def locate_package(package_name):
 
 
 def locate_dist_info_dir(pkgname):
-    """
-    Locate the distribution metadata directory for a package.
+    """Locate the distribution metadata directory for a package.
+
     Accepted metadata directories either uses [NAME].{dist-info, egg-info},
     or [NAME]-[VERSION].{dist-info, egg-info}; this matches the way
     various common distros distribute the metadata directories.
@@ -109,7 +109,8 @@ class IsolatedPackageFinder(DistributionFinder):
         }
 
     def find_spec(self, fullname, path=None, target=None):
-        """
+        """Find the package specification for the named package.
+
         :param fullname: Fully-qualified name of the module to find.
             e.g. PySide6, PySide6.QtCore
         :param path: __path__ of the parent package for submodules;
