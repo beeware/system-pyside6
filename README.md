@@ -19,15 +19,15 @@ This package provides a customization of the Python import system that allows sy
 
 To use `system-pyside6`, install the system packages for PySide6:
 
-* **Ubuntu / Debian** - `sudo apt-get install python3-pyside6.qtwidgets` (Only available from Ubuntu 25.10+ / Debian 14+)
+* **Ubuntu / Debian** - `sudo apt-get install python3-pyside6.qtwidgets` (and other modules you may need, such as ``python3-pyside6.qtcore``; Only available from Ubuntu 24.10+ / Debian 13+)
 
-* **Fedora** - `sudo dnf install python3-pyside6`
+* **Fedora** - `sudo dnf install python3-pyside6`, then `sudo dnf upgrade --refresh`
 
 * **Arch/ Manjaro** - `sudo pacman -Syu pyside6`
 
 * **OpenSUSE Tumbleweed** - `sudo zypper install python3-pyside6`
 
-Then, create a virtual environment, and install `system-pyside` into that environment. You should then be able to write a Python app using PySide6 without adding `PySide6` as a dependency of your app.
+Then, create a virtual environment, and install `system-pyside6` into that environment. You should then be able to write a Python app using PySide6 without adding `PySide6` as a dependency of your app.
 
 ## Community
 
