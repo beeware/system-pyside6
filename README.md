@@ -13,7 +13,7 @@ A Python package that exposes system-installed [PySide6](https://pypi.org/projec
 
 PySide6 publishes multiple packages to PyPI. Howevever, these packages include a full copy of Qt. As a result, a Python app that uses a virtual environment and specifies PySide6 as a dependency will not use the system version of Qt - and as a result, will not adopt the system theme. This leads to an app that doesn't look native, as it doesn't conform to the system look and feel.
 
-This package provides a customization of the Python import system that allows system-installed Python packages
+This package provides a customization of the Python import system that allows system-installed Python packages to be used in a virtual environment.
 
 **NOTE: This is not an official Qt package!!** The BeeWare project has provided this package to provide a way to write Python applications that use a virtual environment (or other forms of environment isolation) without the need to duplicate Qt libraries in the virtual environment.
 
