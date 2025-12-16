@@ -28,7 +28,7 @@ jobs:
       - name: Get packages
         uses: actions/download-artifact@v7.0.0
         with:
-          name: ${{ needs.ci.outputs.artifact-name }}
+          name: Packages
           path: dist
 
       - name: Create release
