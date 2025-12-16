@@ -4,7 +4,7 @@
 [![PyPI Version](https://img.shields.io/pypi/v/system-pyside6.svg)](https://pypi.python.org/pypi/system-pyside6)
 [![Maturity](https://img.shields.io/pypi/status/system-pyside6.svg)](https://pypi.python.org/pypi/system-pyside6)
 [![BSD License](https://img.shields.io/pypi/l/system-pyside6.svg)](https://github.com/beeware/system-pyside6/blob/main/LICENSE)
-[![Build Status](https://github.com/beeware/system-pyside6/workflows/CI/badge.svg?branch=main)](https://github.com/beeware/system-pyside6/actions)
+[![Build Status](https://github.com/beeware/system-pyside6/actions/workflows/ci.yml/badge.svg)](https://github.com/beeware/system-pyside6/actions)
 [![Discord server](https://img.shields.io/discord/836455665257021440?label=Discord%20Chat&logo=discord&style=plastic)](https://beeware.org/bee/chat/)
 
 A Python package that exposes system-installed [PySide6](https://pypi.org/project/PySide6/) packages into a virtual environment.
