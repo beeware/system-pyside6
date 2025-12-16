@@ -25,15 +25,10 @@ jobs:
         run: |
           echo "VERSION=${GITHUB_REF_NAME#v}" | tee -a $GITHUB_ENV
 
-      - name: Set up Python
-        uses: actions/setup-python@v6.1.0
-        with:
-          python-version: "3.X"
-
       - name: Get packages
         uses: actions/download-artifact@v7.0.0
         with:
-          pattern: Packages
+          name: ${{ needs.ci.outputs.artifact-name }}
           path: dist
 
       - name: Create release
@@ -43,21 +38,6 @@ jobs:
           draft: true
           artifacts: dist/*
           artifactErrorsFailBuild: true
-
-  test-publish:
-    name: Publish test package
-    needs: release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      # This permission is required for trusted publishing.
-      id-token: write
-    steps:
-      - name: Get packages
-        uses: actions/download-artifact@v7.0.0
-        with:
-          name: ${{ needs.ci.outputs.artifact-name }}
-          path: dist
 
       - name: Publish release to Test PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
