@@ -74,7 +74,7 @@ class IsolatedDistribution(Distribution):
         self._dist_info = dist_info
 
         if not self._dist_info:
-            raise RuntimeError(f"No dist-info found for {pkgname}")
+            raise RuntimeError(f"No dist-info directory found for {pkgname}")
 
     def read_text(self, filename):
         file = self._dist_info / filename
@@ -113,11 +113,12 @@ class IsolatedPackageFinder(DistributionFinder):
         :param target: Some sort of existing module object to aid the
             finder; unused here.
         """
-        if fullname == pkg or fullname.startswith(pkg + "."):
-            spec = importlib.machinery.PathFinder.find_spec(
-                fullname, SITE_PACKAGE_DIR
-            )
-            return spec
+        for pkg in self.packages:
+            if fullname == pkg or fullname.startswith(pkg + "."):
+                spec = importlib.machinery.PathFinder.find_spec(
+                    fullname, SITE_PACKAGE_DIR
+                )
+                return spec
         return None
 
     def find_distributions(self, context=None):
