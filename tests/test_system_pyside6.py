@@ -6,7 +6,7 @@ import pytest
 
 IS_DEBIAN = (
     "debian" in platform.freedesktop_os_release()["ID"]
-    or "debian" in platform.freedesktop_os_release()["ID_LIKE"]
+    or "debian" in platform.freedesktop_os_release().get("ID_LIKE", "")
 )
 
 
