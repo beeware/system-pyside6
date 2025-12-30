@@ -90,7 +90,8 @@ jobs:
                 python3-devel \
                 gcc \
                 make \
-                pkgconf-pkg-config
+                pkgconf-pkg-config \
+                python3-kf6-kstatusnotifieritem
 
           - distro: archlinux:base
             install_cmd: |
@@ -102,7 +103,8 @@ jobs:
                 breeze \
                 pyside6 \
                 python-pytorch \
-                base-devel
+                base-devel \
+                kstatusnotifieritem
 
               # Without this, we get an error on ICUi18n:
               # https://www.reddit.com/r/archlinux/comments/1oz6paq/
@@ -120,7 +122,8 @@ jobs:
                 python3-pytorch \
                 python3-pyside6 \
                 patterns-devel-base-devel_basis \
-                python3-devel
+                python3-devel \
+                python3-kf6-kstatusnotifieritem
 
     steps:
       - name: Install system dependencies

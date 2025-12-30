@@ -33,21 +33,6 @@ def get_system_site():
 SITE_PACKAGE_DIR = get_system_site()
 
 
-def locate_package(package_name):
-    """Locate a package in system directories by a specific name.
-
-    :param package_name: Name of the package to search for.
-    :return: All package directories matching the package name.
-    """
-
-    paths = []
-    for directory in SITE_PACKAGE_DIR:
-        path = Path(directory) / package_name
-        if path.exists() and path.is_dir():
-            paths.append(path)
-    return paths
-
-
 def locate_dist_info_dir(pkgname):
     """Locate the distribution metadata directory for a package.
 
@@ -89,7 +74,7 @@ class IsolatedDistribution(Distribution):
         self._dist_info = dist_info
 
         if not self._dist_info:
-            raise ImportError(f"No dist-info found for {pkgname}")
+            raise RuntimeError(f"No dist-info directory found for {pkgname}")
 
     def read_text(self, filename):
         file = self._dist_info / filename
@@ -102,10 +87,19 @@ class IsolatedDistribution(Distribution):
 
 
 class IsolatedPackageFinder(DistributionFinder):
-    def __init__(self, package_dirs):
-        self.package_dirs = package_dirs
+    def __init__(self, packages, dist_packages):
+        """
+        :param packages: List of packages/modules that can be imported into
+            the current venv from global site packages.
+        :param dist_packages: List of distribution names that can be queried
+            within the current venv from global site packages.  This is necessary
+            because KDE package bindings do not ship corresponding .dist-info
+            directories for some reason.
+        """
+        self.packages = packages
+        self.dist_packages = dist_packages
         self.dist_info_dirs = {
-            pkgname: locate_dist_info_dir(pkgname) for pkgname in package_dirs
+            pkgname: locate_dist_info_dir(pkgname) for pkgname in dist_packages
         }
 
     def find_spec(self, fullname, path=None, target=None):
@@ -119,19 +113,12 @@ class IsolatedPackageFinder(DistributionFinder):
         :param target: Some sort of existing module object to aid the
             finder; unused here.
         """
-        for pkg, pkg_paths in self.package_dirs.items():
+        for pkg in self.packages:
             if fullname == pkg or fullname.startswith(pkg + "."):
-                for pkg_path in pkg_paths:
-                    # Use pkg_path here, as PathFinder.find_spec
-                    # accepts the value of an array of paths such as
-                    # sys.path for its second argument -- i.e. it's the
-                    # root packages directory, not the path of
-                    # the parent for submodules like our path parameter.
-                    spec = importlib.machinery.PathFinder.find_spec(
-                        fullname, [str(pkg_path.parent)]
-                    )
-                    if spec is not None:
-                        return spec
+                spec = importlib.machinery.PathFinder.find_spec(
+                    fullname, SITE_PACKAGE_DIR
+                )
+                return spec
         return None
 
     def find_distributions(self, context=None):
@@ -143,16 +130,29 @@ class IsolatedPackageFinder(DistributionFinder):
 
         # System packages on Fedora etc. uses PySide6 as the distribution.
         # instead of like PySide6-Essentials used on PyPI.
-        if context.name in self.package_dirs:
+        if context.name in self.dist_packages:
             yield IsolatedDistribution(context.name, self.dist_info_dirs[context.name])
 
 
 sys.meta_path.insert(
     0,
     IsolatedPackageFinder(
-        {
-            "PySide6": locate_package("PySide6"),
-            "shiboken6": locate_package("shiboken6"),
-        }
+        [
+            "PySide6",
+            "shiboken6",
+            # Python-bound KDE6 frameworks; from
+            # https://invent.kde.org/teams/goals/streamlined-application-development-experience/-/issues/9  # noqa: E501
+            "KCoreAddons",
+            "KGuiAddons",
+            "KI18n",
+            "KWidgetsAddons",
+            "KNotifications",
+            "KStatusNotifierItem",
+            "KUnitConversion",
+            "KXmlGui",
+        ],
+        # Only PySide6 and shiboken6 are properly compiled distributions in the sense
+        # of Python packaging.
+        ["PySide6", "shiboken6"],
     ),
 )
