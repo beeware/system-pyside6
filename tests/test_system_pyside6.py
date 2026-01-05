@@ -1,7 +1,12 @@
 import importlib.metadata
 import os
+import platform
 
 import pytest
+
+IS_DEBIAN = "debian" in platform.freedesktop_os_release()[
+    "ID"
+] or "debian" in platform.freedesktop_os_release().get("ID_LIKE", "")
 
 
 def test_qapplication_override():
@@ -47,3 +52,12 @@ def test_nonexposal():
         import torch  # noqa: F401
     with pytest.raises(importlib.metadata.PackageNotFoundError):
         importlib.metadata.version("torch")
+
+
+@pytest.mark.xfail(
+    IS_DEBIAN, reason="Debian does not provide KDE frameworks that are bound to Python"
+)
+def test_import_kde():
+    import KStatusNotifierItem
+
+    _ = KStatusNotifierItem.KStatusNotifierItem
