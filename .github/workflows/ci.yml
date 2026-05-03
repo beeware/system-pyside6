@@ -119,11 +119,14 @@ jobs:
                 python3-virtualenv \
                 python3-pip \
                 breeze \
-                python3-pytorch \
                 python3-pyside6 \
                 patterns-devel-base-devel_basis \
                 python3-devel \
                 python3-kf6-kstatusnotifieritem
+
+              # 2026-05-03 OpenSUSE's pytorch packages seem broken;
+              # use a --break-system-packages installation.
+              pip install --break-system-packages torch
 
     steps:
       - name: Install system dependencies
