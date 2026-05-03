@@ -126,7 +126,7 @@ jobs:
 
               # 2026-05-03 OpenSUSE's pytorch packages seem broken;
               # use a --break-system-packages installation.
-              pip install --break-system-packages pytorch
+              pip install --break-system-packages torch
 
     steps:
       - name: Install system dependencies
