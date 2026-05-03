@@ -113,6 +113,7 @@ jobs:
           - distro: opensuse/tumbleweed
             install_cmd: |
               zypper refresh
+              zypper dup
               zypper --non-interactive install \
                 git \
                 python3 \
