@@ -53,7 +53,7 @@ pre-commit = [
 ]
 
 setuptools-scm = [
-    "setuptools_scm == 10.0.5",
+    "setuptools_scm == 10.2.0",
 ]
 
 tox-uv = [
