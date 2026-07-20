@@ -19,6 +19,9 @@ concurrency:
   group: ${{ github.workflow}}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 defaults:
   run:
     shell: bash
@@ -29,7 +32,7 @@ env:
 jobs:
   pre-commit:
     name: Pre-commit checks
-    uses: beeware/.github/.github/workflows/pre-commit-run.yml@main
+    uses: beeware/.github/.github/workflows/pre-commit-run.yml@741cc5a311012ee0ee195938889a337449d01eeb  # main
     with:
       pre-commit-source: "--group pre-commit"
 
@@ -44,12 +47,13 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v7
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
       with:
         fetch-depth: 0
+        persist-credentials: false
 
     - name: Build and inspect package
-      uses: hynek/build-and-inspect-python-package@v2.18.0
+      uses: hynek/build-and-inspect-python-package@d44ca7d91762de7a7d5436ddae667c6da6d1c3df  # v2.18.0
       with:
         attest-build-provenance-github: ${{ inputs.attest-package }}
 
@@ -58,7 +62,10 @@ jobs:
     needs: package
     runs-on: ubuntu-latest
     container:
-      image: ${{ matrix.distro }}
+      # The matrix deliberately tracks rolling distro tags (e.g. archlinux:base,
+      # opensuse/tumbleweed) to test against each distro's *current* PySide6
+      # packages; pinning digests would defeat that purpose.
+      image: ${{ matrix.distro }}  # zizmor: ignore[unpinned-images]
     env:
       QT_STYLE_OVERRIDE: breeze
     strategy:
@@ -138,7 +145,9 @@ jobs:
           git config --global --add safe.directory $PWD
 
       - name: Checkout repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Install Python dependencies
         run: |
