@@ -141,7 +141,7 @@ sys.meta_path.insert(
             "PySide6",
             "shiboken6",
             # Python-bound KDE6 frameworks; from
-            # https://invent.kde.org/teams/goals/streamlined-application-development-experience/-/issues/9  # noqa: E501
+            # https://invent.kde.org/teams/goals/streamlined-application-development-experience/-/issues/9
             "KCoreAddons",
             "KGuiAddons",
             "KI18n",
